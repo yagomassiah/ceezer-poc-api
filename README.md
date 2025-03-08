@@ -2,6 +2,9 @@
 
 Hey Ceezer team, ahead of our conversation for this Monday I created a small naive-approach poc for calculating and tracking carbon emissions across different categories like transportation, energy usage, and food consumption.
 
+## Database Schema
+![Database Schema](dbml.png)
+
 ## Prerequisites
 
 - Node.js (v22 or higher) -- I just used nvm to manage this
