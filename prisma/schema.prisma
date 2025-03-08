@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String            @id @default(uuid())
+  email             String            @unique
+  password          String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now()) @updatedAt
+  emissionSummaries EmissionSummary[]
+
+  @@map("users")
+}
+
+model EmissionSummary {
+  id              String          @id @default(uuid())
+  periodDays      Int // Number of days the emissions are calculated for
+  totalEmissions  Float // Sum of all emissions from the categories (kg CO₂e)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  userId          String
+  user            User            @relation(fields: [userId], references: [id])
+  emissionEntries EmissionEntry[]
+
+  @@map("emission_summaries")
+}
+
+model EmissionEntry {
+  id                String           @id @default(uuid())
+  category          EmissionCategory @relation(fields: [categoryId], references: [id])
+  categoryId        String
+  value             Float // User input (distance traveled, energy used, etc.)
+  emissions         Float // Computed emission value (after applying coefficient)
+  unit              String // The unit used in this entry (km, kWh, m³, etc.)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  emissionSummary   EmissionSummary  @relation(fields: [emissionSummaryId], references: [id])
+  emissionSummaryId String
+
+  @@map("emission_entries")
+}
+
+model EmissionCategory {
+  id          String          @id @default(uuid())
+  name        String // Category name (e.g., "Transportation", "Energy Use", "Food Consumption")
+  type        CategoryType // Enum: TRANSPORTATION, ENERGY_USE, FOOD_CONSUMPTION
+  coefficient Float // Emission factor (kg CO₂e/unit)
+  unit        String // Standard unit for this category (km, kWh, m³, etc.)
+  entries     EmissionEntry[]
+
+  @@map("emission_categories")
+}
+
+enum CategoryType {
+  TRANSPORTATION
+  ENERGY_USE
+  FOOD_CONSUMPTION
+}
+
+enum UnitType {
+  KM
+  KWH
+  M3
+  LITER
+  KG
+}
