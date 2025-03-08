@@ -6,7 +6,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
     dotenv.config();
+
     const app = await NestFactory.create(AppModule);
+
+    // Enable validation pipe with automatic transformation
     app.useGlobalPipes(
         new ValidationPipe({
             whitelist: true,
@@ -14,20 +17,25 @@ async function bootstrap() {
         }),
     );
 
+    // Configure Swagger documentation
     const config = new DocumentBuilder()
-        .setTitle('Emissions API')
-        .setDescription('Emissions API description')
+        .setTitle('Ceezer Emissions API')
+        .setDescription('API for calculating and tracking carbon emissions')
         .setVersion('1.0')
         .build();
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
+
+    // Enable graceful shutdown
     app.enableShutdownHooks();
 
+    const port = process.env.PORT ?? 3000;
+    await app.listen(port);
+    console.log(`🚀 Application is running on: http://localhost:${port}`);
     console.log(
-        `api-${process.env.ENVIRONMENT}@` + process.env.npm_package_version,
+        `📚 API documentation available at: http://localhost:${port}/api`,
     );
-    await app.listen(process.env.PORT ?? 3000);
 }
 
 bootstrap().catch((err) => {

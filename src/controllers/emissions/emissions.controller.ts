@@ -17,20 +17,6 @@ import { EmissionSummaryEntity } from './entity/emission-summary.entity';
 export class EmissionsController {
     constructor(private readonly emissionsService: EmissionsService) {}
 
-    // @Get('/')
-    // async findAll(): Promise<Record<string, any>> {
-    //     try {
-    //         const emissions = await this.emissionsService.findAll();
-    //         return emissions;
-    //     } catch (error) {
-    //         console.log(error);
-    //         throw new HttpException(
-    //             'Error fetching emissions',
-    //             HttpStatus.INTERNAL_SERVER_ERROR,
-    //         );
-    //     }
-    // }
-
     @ApiOperation({
         summary: 'Create an emission summary',
         description:
