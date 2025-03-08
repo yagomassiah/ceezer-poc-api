@@ -131,7 +131,7 @@ src/
 
 1. If the database connection fails:
    - Ensure Docker is running
-   - Check if port 5432 is available
+   - Check if port 5433 is available (used 5433 to prevent any clashes with your local dbs)
    - Verify .env configuration
 
 2. If seeding fails:
@@ -139,9 +139,5 @@ src/
    - Check database connection
    - Try resetting the database
 
-## Contributing
+Or just shoot me a message!
 
-1. Create a feature branch
-2. Commit your changes
-3. Push to the branch
-4. Create a Pull Request
